@@ -63,7 +63,7 @@ pipeline {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
                         sh 'kubectl get all -n stock-app'
-                        sh 'kubectl delete -f deployment-config.yaml'
+//                        sh 'kubectl delete -f deployment-config.yaml'
                         sh 'kubectl get all -n stock-app'
                }
               }
