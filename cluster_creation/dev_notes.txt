@@ -1,0 +1,69 @@
+kubernetes cluster name:
+analytics-cluster
+
+
+how to create it from jenkins server command line:
+
+#### cluster creation:
+
+eksctl create cluster \
+--name analytics-cluster \
+--version 1.18 \
+--region us-east-2 \
+--nodegroup-name linux-nodes \
+--node-type t2.small
+--nodes 3 \
+--nodes-min 1 \
+--nodes-max 4 \
+--with-oidc \
+--managed
+
+
+
+
+#### loadbalancing
+
+create iam oidc provider and pair with cluster:
+eksctl utils associate-iam-oidc-provider \
+    --region us-east-2 \
+    --cluster analytics-cluster \
+    --approve
+
+download the loadbalancer policy:
+curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+
+create IAM policy (fails when already exists):
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam-policy.json
+
+Create an IAM role and Kubernetes service account named aws-load-balancer-controller in the 
+kube-system namespace, a cluster role, and a cluster role binding 
+for the load balancer controller to use with the following command: 
+(works fine if rerunning, this creates new stack)
+
+eksctl create iamserviceaccount \
+  --cluster=analytics-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --attach-policy-arn=arn:aws:iam::667684686916:policy/AWSLoadBalancerControllerIAMPolicy \
+  --override-existing-serviceaccounts \
+  --approve
+
+
+
+#### install aws loadbalancer controller
+
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+helm repo add eks https://aws.github.io/eks-charts
+
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
+  --set clusterName=analytics-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  -n kube-system
+
+and verify than now it is there
+kubectl get deployment -n kube-system aws-load-balancer-controller
+
+

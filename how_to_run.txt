@@ -1,0 +1,124 @@
+install anaconda (whichever new version)
+(base) coil@coil-VM:~/Desktop$ conda create -n streamlit_env python=3.6  pandas numpy  
+
+#
+# To activate this environment, use
+#
+#     $ conda activate streamlit_env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+(base) coil@coil-VM:~/Desktop$ conda activate decision_trees
+(decision_trees) coil@coil-VM:~/Desktop$ which python
+/home/coil/anaconda3/envs/decision_trees/bin/python
+(decision_trees) coil@coil-VM:~/Desktop$ which python3
+/home/coil/anaconda3/envs/decision_trees/bin/python3
+(decision_trees) coil@coil-VM:~/Desktop$ python --version
+Python 3.5.6 :: Anaconda, Inc.
+
+
+(decision_trees) coil@coil-VM:~/Desktop$ conda install -c quantopian ta-lib
+
+---------------------
+before running jupyter notebook
+conda install jupyter
+
+which jupyter
+
+jupyter-notebook
+
+
+and graphviz
+conda install python-graphviz 
+
+
+pip install cython 
+pip install yfinance
+pip3 install yfinance
+pip install joblib
+pip install pandas_datareader
+
+conda install -c anaconda jupyterlab
+conda install -c anaconda scipy
+conda install -c conda-forge streamlit
+conda install -c conda-forge fbprophet
+conda install -c conda-forge scikit-learn
+conda install -c conda-forge keras
+
+conda install pytorch torchvision cpuonly -c pytorch
+conda install keras
+
+
+aand you are ready to go
+
+-------------------------------------------
+import talib as ta
+import joblib
+import pandas as pd
+
+#suppress 'SettingWithCopy' warning
+pd.set_option('mode.chained_assignment', None)
+#!pip install pandas_datareader
+#!pip3 install seaborn
+import seaborn as sns
+from IPython.core.display import display, HTML
+display(HTML("<style>.container { width:100% !important; }</style>"))
+
+# ___library_import_statements___
+import pandas as pd
+
+# for pandas_datareader, otherwise it might have issues, sometimes there is some version mismatch
+pd.core.common.is_list_like = pd.api.types.is_list_like
+
+# make pandas to print dataframes nicely
+pd.set_option('expand_frame_repr', False)  
+
+import pandas_datareader.data as web
+import numpy as np
+import matplotlib.pyplot as plt
+import datetime
+import time
+
+#newest yahoo API 
+import yfinance as yahoo_finance
+
+#optional 
+#yahoo_finance.pdr_override()
+
+%matplotlib inline
+
+import talib as ta
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+# was giving me some warnings
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
