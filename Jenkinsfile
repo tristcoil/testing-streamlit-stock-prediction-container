@@ -29,23 +29,23 @@ pipeline {
 
 
 
-         stage('Build Docker Image') {
-             steps {
-                    sh 'sudo ./build_docker.sh; sleep 10'
+//         stage('Build Docker Image') {
+//             steps {
+//                    sh 'sudo ./build_docker.sh; sleep 10'
+//
+//              }
+//             }
 
-              }
-             }
+//         stage('Upload docker image to DockerHub') {
+//             steps {
 
-         stage('Upload docker image to DockerHub') {
-             steps {
-
-                  withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')])
-                {
-                  sh 'echo $USER'
-                  sh 'sudo ./upload_docker_jenkins.sh $USER $PASS'
-               }
-              }
-             }
+//                  withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')])
+//                {
+//                  sh 'echo $USER'
+//                  sh 'sudo ./upload_docker_jenkins.sh $USER $PASS'
+//               }
+//              }
+//             }
 
 
          stage('Associate with cluster') {
@@ -63,7 +63,7 @@ pipeline {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
                         sh 'kubectl get all -n stock-app'
-//                        sh 'kubectl delete -f deployment-config.yaml'
+                        sh 'kubectl delete -f deployment-config.yaml'
                         sh 'kubectl get all -n stock-app'
                }
               }
@@ -86,6 +86,8 @@ pipeline {
                     withAWS(credentials:'aws-kubernetes') {
                         sh 'sleep 60'
                         sh 'kubectl get ingress/ingress-stock-app -n stock-app'
+                        sh 'sleep 60'
+                        sh 'kubectl get all --all-namespaces' 
                }
               }
              }
