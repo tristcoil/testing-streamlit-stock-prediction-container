@@ -52,7 +52,7 @@ pipeline {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
                         sh 'aws eks --region us-east-2 update-kubeconfig --name analytics-cluster'
-                        sh 'kubectl get svc'
+                        sh '/home/ubuntu/bin/kubectl get svc'
 
                }
               }
@@ -62,9 +62,9 @@ pipeline {
            stage('Delete previous deployment') {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
-                        sh 'kubectl get all -n stock-app'
-                        sh 'kubectl delete -f deployment-config.yaml'
-                        sh 'kubectl get all -n stock-app'
+                        sh '/home/ubuntu/bin/kubectl get all -n stock-app'
+                        sh '/home/ubuntu/bin/kubectl delete -f deployment-config.yaml'
+                        sh '/home/ubuntu/bin/kubectl get all -n stock-app'
                }
               }
              }
@@ -73,10 +73,10 @@ pipeline {
          stage('Deploy app to k8s and check namespace') {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
-                        sh 'kubectl apply -f deployment-config.yaml'
+                        sh '/home/ubuntu/bin/kubectl apply -f deployment-config.yaml'
                         sh 'sleep 60'
-                        sh 'kubectl get all -n stock-app'
-                        sh 'kubectl describe pods -n stock-app'
+                        sh '/home/ubuntu/bin/kubectl get all -n stock-app'
+                        sh '/home/ubuntu/bin/kubectl describe pods -n stock-app'
                }
               }
              }
@@ -85,9 +85,9 @@ pipeline {
              steps {
                     withAWS(credentials:'aws-kubernetes') {
                         sh 'sleep 60'
-                        sh 'kubectl get ingress/ingress-stock-app -n stock-app'
+                        sh '/home/ubuntu/bin/kubectl get ingress/ingress-stock-app -n stock-app'
                         sh 'sleep 60'
-                        sh 'kubectl get all --all-namespaces' 
+                        sh '/home/ubuntu/bin/kubectl get all --all-namespaces' 
                }
               }
              }
